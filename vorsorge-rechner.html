@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Das Geschenk der Vorsorge</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a0f1e 0%, #0d1a2e 50%, #091525 100%);
+      font-family: Georgia, 'Times New Roman', serif;
+      color: #e8dcc8;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(180deg, #0d2040 0%, transparent 100%);
+      border-bottom: 1px solid rgba(196,164,100,0.3);
+      padding: 40px 32px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(196,164,100,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-eyebrow {
+      font-size: 11px; letter-spacing: 4px; color: #c4a464;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .header h1 {
+      font-size: clamp(24px, 5vw, 42px); font-weight: normal;
+      margin: 0 0 12px; color: #f0e6d0;
+      letter-spacing: -0.5px; line-height: 1.2;
+    }
+    .header p { color: #a09070; font-size: 16px; font-style: italic; }
+
+    /* MAIN CONTAINER */
+    .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+
+    /* CARDS */
+    .card {
+      border-radius: 4px; padding: 28px; margin-bottom: 32px;
+    }
+    .card-gold {
+      background: rgba(196,164,100,0.06);
+      border: 1px solid rgba(196,164,100,0.2);
+    }
+    .card-anlage {
+      background: linear-gradient(135deg, rgba(196,164,100,0.12) 0%, rgba(196,164,100,0.04) 100%);
+      border: 1px solid rgba(196,164,100,0.35);
+      position: relative; overflow: hidden;
+    }
+    .card-anlage::after {
+      content: '';
+      position: absolute; top: -20px; right: -20px;
+      width: 120px; height: 120px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,164,100,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .card-blau {
+      background: linear-gradient(135deg, rgba(20,40,80,0.6) 0%, rgba(10,20,50,0.6) 100%);
+      border: 1px solid rgba(196,164,100,0.25);
+    }
+    .card-gesamt {
+      background: linear-gradient(135deg, rgba(196,164,100,0.1) 0%, rgba(196,164,100,0.03) 100%);
+      border: 1px solid rgba(196,164,100,0.4);
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 10px; letter-spacing: 3px; color: #c4a464;
+      text-transform: uppercase; margin-bottom: 24px;
+    }
+    .section-label-sm { margin-bottom: 16px; }
+
+    /* SLIDER GRID */
+    .slider-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 24px;
+    }
+    .slider-item label {
+      display: block; font-size: 11px; color: #a09070;
+      margin-bottom: 6px; letter-spacing: 0.5px;
+    }
+    .slider-value {
+      font-size: 20px; color: #c4a464; font-weight: bold; margin-bottom: 8px;
+    }
+    input[type=range] {
+      width: 100%; accent-color: #c4a464; cursor: pointer;
+      height: 4px; background: rgba(196,164,100,0.15);
+      border-radius: 2px; outline: none; border: none;
+      -webkit-appearance: none; appearance: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #c4a464; cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      background: rgba(196,164,100,0.15); height: 4px; border-radius: 2px;
+    }
+
+    /* STATS GRID */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 24px;
+    }
+    .stat-label { color: #a09070; font-size: 12px; margin-bottom: 4px; }
+    .stat-val-lg { font-size: 32px; color: #c4a464; font-weight: bold; }
+    .stat-val-md { font-size: 26px; color: #e8dcc8; }
+    .stat-val-green { font-size: 26px; color: #7dbf7d; }
+
+    .quote-box {
+      margin-top: 20px; padding: 12px 16px;
+      background: rgba(0,0,0,0.2);
+      border-left: 3px solid #c4a464;
+      font-size: 13px; color: #a09070; font-style: italic;
+    }
+
+    /* VERGLEICH */
+    .vergleich-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;
+    }
+    @media (max-width: 500px) {
+      .vergleich-grid { grid-template-columns: 1fr; }
+    }
+    .col-mit {
+      background: linear-gradient(160deg, rgba(60,120,60,0.12) 0%, rgba(30,60,30,0.06) 100%);
+      border: 1px solid rgba(100,180,100,0.3);
+      border-radius: 4px; padding: 24px;
+    }
+    .col-ohne {
+      background: linear-gradient(160deg, rgba(120,40,40,0.12) 0%, rgba(60,20,20,0.06) 100%);
+      border: 1px solid rgba(180,80,80,0.3);
+      border-radius: 4px; padding: 24px;
+    }
+    .col-header-green { font-size: 10px; letter-spacing: 3px; color: #7dbf7d; text-transform: uppercase; margin-bottom: 16px; }
+    .col-header-red   { font-size: 10px; letter-spacing: 3px; color: #e07070; text-transform: uppercase; margin-bottom: 16px; }
+
+    .row { margin-bottom: 16px; }
+    .row-label { color: #a09070; font-size: 11px; margin-bottom: 2px; }
+    .row-val { font-size: 22px; color: #e8dcc8; }
+    .row-val-green { font-size: 22px; color: #7dbf7d; }
+    .row-val-red   { font-size: 22px; color: #e07070; }
+
+    .zins-box-green {
+      background: rgba(100,180,100,0.1); border: 1px solid rgba(100,180,100,0.25);
+      border-radius: 3px; padding: 12px; margin-bottom: 16px;
+    }
+    .zins-box-red {
+      background: rgba(180,80,80,0.1); border: 1px solid rgba(180,80,80,0.25);
+      border-radius: 3px; padding: 12px; margin-bottom: 16px;
+    }
+    .zins-big-green { font-size: 26px; color: #7dbf7d; font-weight: bold; }
+    .zins-big-red   { font-size: 26px; color: #e07070; font-weight: bold; }
+
+    /* VORTEILE */
+    .vorteile-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 20px;
+    }
+    .vorteil-card {
+      padding: 20px; background: rgba(196,164,100,0.06); border-top: 2px solid #c4a464;
+    }
+    .vorteil-label { font-size: 11px; color: #a09070; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .vorteil-val   { font-size: 28px; color: #c4a464; font-weight: bold; }
+    .vorteil-sub   { font-size: 12px; color: #707070; margin-top: 4px; }
+
+    /* GESAMTBILANZ */
+    .gesamt-einzahlung-label { font-size: 14px; color: #a09070; margin-bottom: 8px; }
+    .gesamt-einzahlung-val   { font-size: 18px; color: #e8dcc8; margin-bottom: 20px; }
+    .gesamt-vorteil-label    { font-size: 14px; color: #a09070; margin-bottom: 8px; }
+    .gesamt-vorteil-val      { font-size: 36px; color: #7dbf7d; font-weight: bold; margin-bottom: 8px; }
+    .gesamt-sub              { font-size: 12px; color: #707070; font-style: italic; }
+    .gesamt-quote {
+      margin-top: 24px; padding: 16px; background: rgba(0,0,0,0.3);
+      border-left: 3px solid #c4a464; font-size: 14px; color: #c4a464;
+      font-style: italic; text-align: left;
+    }
+
+    /* HINWEISE */
+    .hinweise {
+      font-size: 11px; color: #606060; line-height: 1.7; padding: 16px;
+      border-top: 1px solid rgba(196,164,100,0.1);
+    }
+    .hinweise strong { color: #808060; }
+
+    .section-label-outer {
+      font-size: 10px; letter-spacing: 3px; color: #c4a464;
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-eyebrow">Finanzielle Weitsicht</div>
+  <h1>Das Geschenk der Vorsorge</h1>
+  <p>Was 100 € im Monat für dein Kind wirklich bedeuten</p>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- PARAMETER -->
+  <div class="card card-gold">
+    <div class="section-label">Parameter anpassen</div>
+    <div class="slider-grid">
+
+      <div class="slider-item">
+        <label>Monatliche Sparrate</label>
+        <div class="slider-value" id="val-sparrate">100 €</div>
+        <input type="range" id="sparrate" min="25" max="500" step="25" value="100" oninput="update()">
+      </div>
+
+      <div class="slider-item">
+        <label>Spardauer</label>
+        <div class="slider-value" id="val-sparjahre">25 Jahre</div>
+        <input type="range" id="sparjahre" min="10" max="30" step="1" value="25" oninput="update()">
+      </div>
+
+      <div class="slider-item">
+        <label>Anlagerendite (Ø)</label>
+        <div class="slider-value" id="val-zins">8 % p.a.</div>
+        <input type="range" id="anlageZins" min="3" max="12" step="0.5" value="8" oninput="update()">
+      </div>
+
+      <div class="slider-item">
+        <label>Kaufpreis Immobilie</label>
+        <div class="slider-value" id="val-kaufpreis">500.000 €</div>
+        <input type="range" id="kaufpreis" min="200000" max="1000000" step="50000" value="500000" oninput="update()">
+      </div>
+
+      <div class="slider-item">
+        <label>Anfangstilgung</label>
+        <div class="slider-value" id="val-tilgung">2 %</div>
+        <input type="range" id="tilgung" min="1" max="4" step="0.5" value="2" oninput="update()">
+      </div>
+
+      <div class="slider-item">
+        <label>Darlehenszins ohne EK</label>
+        <div class="slider-value" id="val-darlehenszins">4,70 %</div>
+        <input type="range" id="darlehenszins" min="1" max="8" step="0.1" value="4.7" oninput="update()">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ANLAGE ERGEBNIS -->
+  <div class="card card-anlage">
+    <div class="section-label section-label-sm" id="anlage-header">Schritt 1 — Das angesparte Kapital nach 25 Jahren</div>
+    <div class="stats-grid">
+      <div>
+        <div class="stat-label">Tatsächlich eingezahlt</div>
+        <div class="stat-val-md" id="out-eingezahlt">—</div>
+      </div>
+      <div>
+        <div class="stat-label">Zinseszins-Gewinn</div>
+        <div class="stat-val-green" id="out-gewinn">—</div>
+      </div>
+      <div>
+        <div class="stat-label">Endkapital (Eigenkapital)</div>
+        <div class="stat-val-lg" id="out-ek">—</div>
+      </div>
+    </div>
+    <div class="quote-box" id="out-faktor">—</div>
+  </div>
+
+  <!-- VERGLEICH LABEL -->
+  <div class="section-label-outer" id="vergleich-header">Schritt 2 — Der Immobilienvergleich bei 500.000 €</div>
+
+  <!-- VERGLEICH SPALTEN -->
+  <div class="vergleich-grid">
+
+    <!-- MIT EK -->
+    <div class="col-mit">
+      <div class="col-header-green">✓ Mit Vorsorge</div>
+      <div class="row">
+        <div class="row-label">Eigenkapital</div>
+        <div class="row-val-green" id="mit-ek">—</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Benötigtes Darlehen</div>
+        <div class="row-val" id="mit-darlehen">—</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Beleihungsauslauf</div>
+        <div class="row-val" id="mit-beleihung">—</div>
+      </div>
+      <div class="zins-box-green">
+        <div class="row-label">Zinssatz (10J)</div>
+        <div class="zins-big-green" id="mit-zins">—</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Monatsrate</div>
+        <div class="row-val" id="mit-rate">—</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Gesamte Zinslast</div>
+        <div class="row-val" id="mit-zinslast">—</div>
+      </div>
+      <div>
+        <div class="row-label">Schuldenfreiheit in</div>
+        <div class="row-val-green" id="mit-laufzeit">—</div>
+      </div>
+    </div>
+
+    <!-- OHNE EK -->
+    <div class="col-ohne">
+      <div class="col-header-red">✗ Ohne Vorsorge</div>
+      <div class="row">
+        <div class="row-label">Eigenkapital</div>
+        <div class="row-val-red">0 €</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Benötigtes Darlehen</div>
+        <div class="row-val" id="ohne-darlehen">—</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Beleihungsauslauf</div>
+        <div class="row-val">100%</div>
+      </div>
+      <div class="zins-box-red">
+        <div class="row-label">Zinssatz (10J)</div>
+        <div class="zins-big-red" id="ohne-zins">4,70%</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Monatsrate</div>
+        <div class="row-val" id="ohne-rate">—</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Gesamte Zinslast</div>
+        <div class="row-val" id="ohne-zinslast">—</div>
+      </div>
+      <div>
+        <div class="row-label">Schuldenfreiheit in</div>
+        <div class="row-val-red" id="ohne-laufzeit">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VORTEILE -->
+  <div class="card card-blau">
+    <div class="section-label">Die Vorteile auf einen Blick</div>
+    <div class="vorteile-grid">
+      <div class="vorteil-card">
+        <div class="vorteil-label">Niedrigere Monatsrate</div>
+        <div class="vorteil-val" id="v-monatsrate">—</div>
+        <div class="vorteil-sub">pro Monat weniger</div>
+      </div>
+      <div class="vorteil-card">
+        <div class="vorteil-label">Gesparte Zinslast</div>
+        <div class="vorteil-val" id="v-zinslast">—</div>
+        <div class="vorteil-sub">weniger an die Bank</div>
+      </div>
+      <div class="vorteil-card">
+        <div class="vorteil-label">Besserer Zinssatz</div>
+        <div class="vorteil-val" id="v-zins">—</div>
+        <div class="vorteil-sub">günstiger dank EK</div>
+      </div>
+      <div class="vorteil-card">
+        <div class="vorteil-label">Früher schuldenfrei</div>
+        <div class="vorteil-val" id="v-zeit">—</div>
+        <div class="vorteil-sub">früher abbezahlt</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GESAMTBILANZ -->
+  <div class="card card-gesamt">
+    <div class="section-label">Gesamter Vorteil — Was die Vorsorge wirklich wert ist</div>
+    <div class="gesamt-einzahlung-label" id="g-label1">Eingezahlte Sparraten über 25 Jahre</div>
+    <div class="gesamt-einzahlung-val" id="g-eingezahlt">—</div>
+    <div class="gesamt-vorteil-label">Dadurch eingesparter Gesamtvorteil</div>
+    <div class="gesamt-vorteil-val" id="g-vorteil">—</div>
+    <div class="gesamt-sub" id="g-sub">—</div>
+    <div class="gesamt-quote" id="g-quote">—</div>
+  </div>
+
+  <!-- HINWEISE -->
+  <div class="hinweise">
+    <strong>Hinweise:</strong> Aktuelle Bauzinsen Mai 2026 laut Finanztip/Interhyp: ca. 3,8–4,7% je nach Beleihungsauslauf.
+    Zinssätze nach Beleihungsauslauf: ≤60% → 3,8%, ≤80% → 4,0%, ≤90% → 4,3%, &gt;90% → 4,7%.
+    Anlagerendite entspricht einem breit diversifizierten globalen ETF-Portfolio (historischer MSCI World Ø ~8–9% p.a., nach Kosten).
+    Alle Berechnungen vereinfacht; individuelle Beratung empfohlen. Keine Anlageberatung.
+  </div>
+
+</div><!-- /container -->
+
+<script>
+  // --- Formatierung ---
+  function fmt(n) {
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+  }
+  function fmtJ(n) { return n.toFixed(1) + ' Jahre'; }
+  function fmtPct(n) { return n.toFixed(2) + '%'; }
+
+  // --- Berechnungen ---
+  function berechneAnlage(rate, jahre, zins) {
+    const n = jahre * 12;
+    const r = zins / 12;
+    if (r === 0) return rate * n;
+    return rate * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+  }
+
+  function berechneAnnuitaet(darlehen, zins, tilgung) {
+    return (darlehen * (zins + tilgung)) / 12;
+  }
+
+  function berechneLaufzeit(darlehen, zins, tilgung) {
+    const rate = berechneAnnuitaet(darlehen, zins, tilgung);
+    let rest = darlehen, monate = 0;
+    while (rest > 0.01 && monate < 600) {
+      const z = rest * (zins / 12);
+      rest -= (rate - z);
+      monate++;
+    }
+    return monate / 12;
+  }
+
+  function gesamtZinsen(darlehen, zins, tilgung) {
+    const rate = berechneAnnuitaet(darlehen, zins, tilgung);
+    let rest = darlehen, summe = 0, monate = 0;
+    while (rest > 0.01 && monate < 600) {
+      const z = rest * (zins / 12);
+      summe += z;
+      rest -= (rate - z);
+      monate++;
+    }
+    return summe;
+  }
+
+  function update() {
+    const sparrate       = +document.getElementById('sparrate').value;
+    const sparjahre      = +document.getElementById('sparjahre').value;
+    const anlageZins     = +document.getElementById('anlageZins').value;
+    const kaufpreis      = +document.getElementById('kaufpreis').value;
+    const tilgung        = +document.getElementById('tilgung').value;
+    const darlehenszins  = +document.getElementById('darlehenszins').value;
+
+    // Slider-Anzeige aktualisieren
+    document.getElementById('val-sparrate').textContent      = sparrate + ' €';
+    document.getElementById('val-sparjahre').textContent     = sparjahre + ' Jahre';
+    document.getElementById('val-zins').textContent          = anlageZins + ' % p.a.';
+    document.getElementById('val-kaufpreis').textContent     = fmt(kaufpreis);
+    document.getElementById('val-tilgung').textContent       = tilgung + ' %';
+    document.getElementById('val-darlehenszins').textContent = darlehenszins.toFixed(2).replace('.', ',') + ' %';
+
+    // --- Anlage ---
+    const ek        = berechneAnlage(sparrate, sparjahre, anlageZins / 100);
+    const eingezahlt = sparrate * sparjahre * 12;
+    const gewinn    = ek - eingezahlt;
+
+    document.getElementById('anlage-header').textContent =
+      'Schritt 1 — Das angesparte Kapital nach ' + sparjahre + ' Jahren';
+    document.getElementById('out-eingezahlt').textContent = fmt(eingezahlt);
+    document.getElementById('out-gewinn').textContent     = '+' + fmt(gewinn);
+    document.getElementById('out-ek').textContent         = fmt(ek);
+    document.getElementById('out-faktor').textContent     =
+      'Aus ' + fmt(eingezahlt) + ' wurden durch Zinseszins ' + fmt(ek) +
+      ' — das ist der Faktor ' + (ek / eingezahlt).toFixed(1) + '×';
+
+    // --- OHNE Eigenkapital (Basis-Zins aus Schieberegler) ---
+    const zins_ohne = darlehenszins / 100;
+
+    // --- MIT Eigenkapital ---
+    const darlehen_mit  = Math.max(0, kaufpreis - ek);
+    const beleihung_mit = darlehen_mit / kaufpreis;
+    // Zinsabschläge relativ zum Basis-Darlehenszins je nach Beleihungsauslauf
+    let zins_mit;
+    if      (beleihung_mit <= 0.60) zins_mit = Math.max(0.005, zins_ohne - 0.009);
+    else if (beleihung_mit <= 0.80) zins_mit = Math.max(0.005, zins_ohne - 0.007);
+    else if (beleihung_mit <= 0.90) zins_mit = Math.max(0.005, zins_ohne - 0.004);
+    else                             zins_mit = zins_ohne;
+
+    const rate_mit     = berechneAnnuitaet(darlehen_mit, zins_mit, tilgung / 100);
+    const laufzeit_mit = berechneLaufzeit(darlehen_mit, zins_mit, tilgung / 100);
+    const zinslast_mit = gesamtZinsen(darlehen_mit, zins_mit, tilgung / 100);
+
+    document.getElementById('mit-ek').textContent       = fmt(ek);
+    document.getElementById('mit-darlehen').textContent = fmt(darlehen_mit);
+    document.getElementById('mit-beleihung').textContent= Math.round(beleihung_mit * 100) + '%';
+    document.getElementById('mit-zins').textContent     = fmtPct(zins_mit * 100);
+    document.getElementById('mit-rate').textContent     = fmt(rate_mit);
+    document.getElementById('mit-zinslast').textContent = fmt(zinslast_mit);
+    document.getElementById('mit-laufzeit').textContent = fmtJ(laufzeit_mit);
+
+    // --- OHNE Eigenkapital ---
+    const darlehen_ohne  = kaufpreis;
+    const rate_ohne      = berechneAnnuitaet(darlehen_ohne, zins_ohne, tilgung / 100);
+    const laufzeit_ohne  = berechneLaufzeit(darlehen_ohne, zins_ohne, tilgung / 100);
+    const zinslast_ohne  = gesamtZinsen(darlehen_ohne, zins_ohne, tilgung / 100);
+
+    document.getElementById('ohne-zins').textContent      = fmtPct(zins_ohne * 100);
+    document.getElementById('ohne-darlehen').textContent  = fmt(darlehen_ohne);
+    document.getElementById('ohne-rate').textContent      = fmt(rate_ohne);
+    document.getElementById('ohne-zinslast').textContent  = fmt(zinslast_ohne);
+    document.getElementById('ohne-laufzeit').textContent  = fmtJ(laufzeit_ohne);
+
+    // --- Vorteile ---
+    const diff_rate     = rate_ohne - rate_mit;
+    const diff_zinslast = zinslast_ohne - zinslast_mit;
+    const diff_zins     = (zins_ohne - zins_mit) * 100;
+    const diff_zeit     = Math.abs(laufzeit_ohne - laufzeit_mit);
+
+    document.getElementById('v-monatsrate').textContent = fmt(diff_rate);
+    document.getElementById('v-zinslast').textContent   = fmt(diff_zinslast);
+    document.getElementById('v-zins').textContent       = diff_zins.toFixed(2) + '%';
+    document.getElementById('v-zeit').textContent       = fmtJ(diff_zeit);
+
+    // --- Gesamtbilanz ---
+    const gesamtvorteil = gewinn + diff_zinslast;
+    document.getElementById('g-label1').textContent   =
+      'Eingezahlte Sparraten über ' + sparjahre + ' Jahre';
+    document.getElementById('g-eingezahlt').textContent = fmt(eingezahlt);
+    document.getElementById('g-vorteil').textContent    = fmt(gesamtvorteil);
+    document.getElementById('g-sub').textContent        =
+      '(Zinsgewinn aus Anlage ' + fmt(gewinn) + ' + eingesparte Zinslast ' + fmt(diff_zinslast) + ')';
+    document.getElementById('g-quote').textContent      =
+      'Für jeden eingezahlten Euro ergibt sich ein Gesamtvorteil von ca. ' +
+      (gesamtvorteil / eingezahlt).toFixed(1) + '× — durch den kombinierten Effekt aus ' +
+      'Zinseszins bei der Anlage und günstigeren Kreditkonditionen.';
+
+    document.getElementById('vergleich-header').textContent =
+      'Schritt 2 — Der Immobilienvergleich bei ' + fmt(kaufpreis);
+  }
+
+  // Beim Laden einmal ausführen
+  update();
+</script>
+</body>
+</html>
